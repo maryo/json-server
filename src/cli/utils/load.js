@@ -35,20 +35,24 @@ module.exports = function(source) {
         if (err) return reject(err)
         resolve(low(new Memory()).setState(response.body))
       })
-    } else if (is.JS(source)) {
+    } else if (is.MODULE(path.resolve(source))) {
       // Clear cache
       const filename = path.resolve(source)
       delete require.cache[filename]
-      const dataFn = require(filename)
+      let data = require(filename)
 
-      if (typeof dataFn !== 'function') {
-        throw new Error(
-          'The database is a JavaScript file but the export is not a function.'
-        )
+      if (typeof data === 'function') {
+        data = data()
+      } else if (data && typeof data.default === 'function') {
+        data = data.default()
+      } else if (data && typeof data.default === 'object') {
+        data = data.default
       }
 
-      // Run dataFn to generate data
-      const data = dataFn()
+      if (typeof data !== 'object') {
+        throw new Error('The database is a JavaScript file but the export is not a function nor an object.')
+      }
+
       resolve(low(new Memory()).setState(data))
     } else {
       throw new Error(`Unsupported source ${source}`)

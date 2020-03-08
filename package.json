@@ -2,14 +2,14 @@
   "name": "json-server",
   "version": "0.16.1",
   "description": "Get a full fake REST API with zero coding in less than 30 seconds",
-  "main": "./lib/server/index.js",
-  "bin": "./lib/cli/bin.js",
+  "main": "./src/server/index.js",
+  "bin": "./src/cli/bin.js",
   "scripts": {
     "test": "npm run build && cross-env NODE_ENV=test jest && npm run lint",
     "start": "babel-node -- src/cli/bin db.json -r routes.json",
     "lint": "eslint . --ignore-path .gitignore",
     "fix": "npm run lint -- --fix",
-    "build": "babel src -d lib",
+    "build": "babel src -d src",
     "toc": "markdown-toc -i README.md",
     "postversion": "git push && git push --tags",
     "prepublishOnly": "npm test && npm run build && pkg-ok"
