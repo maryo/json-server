@@ -25,7 +25,7 @@ module.exports = (db, opts) => {
   const router = express.Router()
 
   // Add middlewares
-  router.use(methodOverride())
+  router.use(methodOverride('_method'))
   router.use(bodyParser)
 
   validateData(db.getState())
