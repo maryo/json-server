@@ -116,7 +116,8 @@ module.exports = function(argv) {
       if (argv.middlewares) {
         middlewares = argv.middlewares.map(function(m) {
           console.log(chalk.gray('  Loading', m))
-          return require(path.resolve(m))
+          const middleware = require(path.resolve(m))
+          return typeof middleware.default === 'function' ? middleware.default : middleware
         })
       }
 
